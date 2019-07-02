@@ -1,0 +1,45 @@
+<html xmlns:th="https://www.thymeleaf.org">
+<body>
+
+	<div th:if="${message}">
+		<h2 th:text="${message}"></h2>
+	</div>
+
+
+	<div>
+		<form method="POST" enctype="multipart/form-data" action="/api">
+			<table>
+				<tr><td>Select signed File: </td><td><input type="file" name="file" /></td></tr>
+				<tr><td></td><td><input type="submit" value="Upload" /></td></tr>
+			</table>
+		</form>
+	</div>
+
+	<div>
+		<form method="get" action="/sessions">
+			<table>
+				<tr><td></td><td><input type="submit" value="Logout" /></td></tr>
+			</table>
+		</form>
+	</div>
+
+	<div>
+		<ul>
+			<tr><td>Documents for signing:</td></tr>
+			<li th:each="file : ${files}">
+				<a th:href="${file}" th:text="${file}" />
+			</li>
+		</ul>
+	</div>
+
+	<div>
+		<ul>
+			<tr><td>Previously signed documents:</td></tr>
+			<li th:each="sigDoc : ${sigDocs}">
+				<a th:href="${sigDoc}" th:text="${sigDoc}" />
+			</li>
+		</ul>
+	</div>
+
+</body>
+</html>
