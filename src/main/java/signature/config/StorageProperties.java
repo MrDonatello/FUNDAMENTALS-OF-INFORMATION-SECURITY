@@ -5,11 +5,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("service")
 public class StorageProperties {
 
-    /**
-     * Folder location for storing files
-     */
     private String locationNotSigned = "documents/not signed";
     private String locationSigned = "documents/signed";
+    private String locationKeys = "documents/public keys";
 
     public StorageProperties() {
     }
@@ -28,5 +26,13 @@ public class StorageProperties {
 
     public void setLocationSigned(String locationSigned) {
         this.locationSigned = locationSigned;
+    }
+
+    public String getLocationKeys() {
+        return locationKeys;
+    }
+
+    public void setLocationKeys(String locationKeys) {
+        this.locationKeys = locationKeys;
     }
 }

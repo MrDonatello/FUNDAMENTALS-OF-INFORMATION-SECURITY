@@ -27,6 +27,7 @@ public class FileSystemStorageService implements StorageService {
 
     private final Path rootLocationNotSigned;
     private final Path rootLocationSigned;
+    private final Path rootLocationKeys;
     private AdminDaoImpl adminDao;
     private ServerConfig serverConfig;
 
@@ -34,12 +35,13 @@ public class FileSystemStorageService implements StorageService {
     public FileSystemStorageService(StorageProperties properties, AdminDaoImpl adminDao, ServerConfig serverConfig) {
         this.rootLocationNotSigned = Paths.get(properties.getLocationNotSigned());
         this.rootLocationSigned = Paths.get(properties.getLocationSigned());
+        this.rootLocationKeys = Paths.get(properties.getLocationKeys());
         this.adminDao = adminDao;
         this.serverConfig = serverConfig;
     }
 
     @Override
-    public void store(MultipartFile file, int userId) {
+    public void store(MultipartFile file, int userId, Path paths) {
         String filename = StringUtils.cleanPath(file.getOriginalFilename());
         try {
             if (file.isEmpty()) {
@@ -51,7 +53,7 @@ public class FileSystemStorageService implements StorageService {
                                 + filename);
             }
             try (InputStream inputStream = file.getInputStream()) {
-                Path root = Paths.get(rootLocationNotSigned.toString().concat("/" + userId));
+                Path root = Paths.get(paths.toString().concat("/" + userId));
                 Files.copy(inputStream, root.resolve(filename),
                         StandardCopyOption.REPLACE_EXISTING);
             }
@@ -106,6 +108,42 @@ public class FileSystemStorageService implements StorageService {
     }
 
     @Override
+    public Resource loadResourceByFile(MultipartFile file, int clientId) {
+        try {
+            String s = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf('.')) + ".txt";
+            Path path = Paths.get(rootLocationNotSigned.toString().concat("/" + clientId).concat("/" + s));
+            Resource resource = new UrlResource(path.toUri());
+            if (resource.exists() || resource.isReadable()) {
+                return resource;
+            } else {
+                throw new StorageFileNotFoundException(
+                        "Could not read file: " + file.getOriginalFilename());
+
+            }
+        } catch (MalformedURLException e) {
+            throw new StorageFileNotFoundException("Could not read file: " + file.getOriginalFilename(), e);
+        }
+    }
+
+    @Override
+    public Resource loadResourceByName(String file, int clientId) {
+        try {
+            String s = file.substring(0, file.lastIndexOf('.')) + ".key";
+            Path path = Paths.get(rootLocationKeys.toString().concat("/" + clientId).concat("/" + s));
+            Resource resource = new UrlResource(path.toUri());
+            if (resource.exists() || resource.isReadable()) {
+                return resource;
+            } else {
+                throw new StorageFileNotFoundException(
+                        "Could not read file: " + file);
+
+            }
+        } catch (MalformedURLException e) {
+            throw new StorageFileNotFoundException("Could not read file: " + file, e);
+        }
+    }
+
+    @Override
     public void delete() {
         // FileSystemUtils.deleteRecursively(rootLocationNotSigned.toFile());
         //FileSystemUtils.deleteRecursively(rootLocation.getName(0).toFile());
@@ -116,6 +154,7 @@ public class FileSystemStorageService implements StorageService {
         try {
             Files.createDirectories(rootLocationNotSigned);
             Files.createDirectories(rootLocationSigned);
+            Files.createDirectories(rootLocationKeys);
             try {
                 adminDao.setAdminCode(serverConfig.getAdminCode());
             } catch (ServiceException e) {

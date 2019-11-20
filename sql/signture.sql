@@ -16,9 +16,7 @@ CREATE TABLE user (
  
 
  CREATE TABLE admin_access (
- id int (11) not null auto_increment,
- admin_code int (11) not null default 777,
- primary key (id)
+ admin_code int (11) not null default 777
  ) ENGINE=INNODB DEFAULT CHARSET=utf8;
 
 CREATE TABLE admin (
@@ -33,7 +31,6 @@ CREATE TABLE admin (
  email varchar(50) not null,
  address varchar (50) not null,
  phone varchar (50) not null,
- public_key varchar (50) not null,
  foreign key(userid) references user(id) on delete cascade,
  primary key (userid),
  key (userid)

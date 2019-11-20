@@ -3,7 +3,7 @@ package signature.dto.response;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UserDtoResponseWithoutDeposit {
+public class UserDtoResponseWithType {
 
     private int id;
     private String firstName;

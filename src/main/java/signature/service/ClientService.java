@@ -13,6 +13,7 @@ import signature.exceptions.ServiceException;
 import signature.model.Client;
 
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,12 +23,14 @@ public class ClientService {
     private final ClientDaoImpl clientDao;
     private ObjectMapper objectMapper;
     private StorageProperties storageProperties;
+    private StorageService storageService;
 
     @Autowired
-    public ClientService(ClientDaoImpl clientDao, ObjectMapper objectMapper, StorageProperties storageProperties) {
+    public ClientService(ClientDaoImpl clientDao, ObjectMapper objectMapper, StorageProperties storageProperties, StorageService storageService) {
         this.clientDao = clientDao;
         this.objectMapper = objectMapper;
         this.storageProperties = storageProperties;
+        this.storageService = storageService;
     }
 
     public UserDtoResponse insert(ClientDto clientDto) throws ServiceException {
@@ -35,7 +38,8 @@ public class ClientService {
         UserDtoResponse userDtoResponse = objectMapper.convertValue(clientDao.insert(client), UserDtoResponse.class);
         boolean createNotSignet = new File(storageProperties.getLocationNotSigned() + "/" + userDtoResponse.getId()).mkdir();
         boolean createSignet = new File(storageProperties.getLocationSigned() + "/" + userDtoResponse.getId()).mkdir();
-        if(!(createNotSignet && createSignet)){
+        boolean createKey = new File(storageProperties.getLocationKeys() + "/" + userDtoResponse.getId()).mkdir();
+        if (!(createNotSignet && createSignet && createKey)) {
             List<ApiError> errorList = new ArrayList<>();
             ApiError apiError = new ApiError(ErrorCode.INVALID_CREATE_DIRECTORY.name(), null, ErrorCode.INVALID_CREATE_DIRECTORY.getErrorString());
             errorList.add(apiError);

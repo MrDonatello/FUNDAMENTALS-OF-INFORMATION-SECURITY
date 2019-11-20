@@ -10,7 +10,9 @@ public interface StorageService {
 
     void init();
 
-    void store(MultipartFile file, int userId);
+    void store(MultipartFile file, int userId, Path path);
+
+     Resource loadResourceByName(String file, int clientId);
 
     Stream<Path> loadAllNotSigned(int clientId);
 
@@ -19,6 +21,8 @@ public interface StorageService {
     Path load(String filename,int clientId);
 
     Resource loadAsResource(String filename,int clientId);
+
+    public Resource loadResourceByFile(MultipartFile file, int clientId);
 
     void delete();
 

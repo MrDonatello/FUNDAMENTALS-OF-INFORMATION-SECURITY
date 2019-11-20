@@ -1,4 +1,4 @@
-<html xmlns:th="https://www.thymeleaf.org">
+<html xmlns:th="https://www.thymeleaf.org" xmlns:>
 <body>
 
 	<div th:if="${message}">
@@ -7,9 +7,9 @@
 
 
 	<div>
-		<form method="POST" enctype="multipart/form-data" action="/api">
+		<form method="POST" enctype="multipart/form-data" action="/client">
 			<table>
-				<tr><td>Select signed File: </td><td><input type="file" name="file" /></td></tr>
+				<tr><td>Select signature: </td><td><input type="file" name="file" /></td></tr>
 				<tr><td></td><td><input type="submit" value="Upload" /></td></tr>
 			</table>
 		</form>
@@ -27,7 +27,7 @@
 		<ul>
 			<tr><td>Documents for signing:</td></tr>
 			<li th:each="file : ${files}">
-				<a th:href="${file}" th:text="${file}" />
+				<a th:href="${file}" th:text="${file}"/>
 			</li>
 		</ul>
 	</div>

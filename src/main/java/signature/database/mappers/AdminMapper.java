@@ -14,8 +14,7 @@ public interface AdminMapper {
     @Options(useGeneratedKeys = true)
     void insertUser(Admin admin);
 
-    @Insert("INSERT INTO admin_access (admin_code) VALUES " +
-            "( #{code} )")
+    @Insert("INSERT INTO admin_access (admin_code) VALUES (#{code})")
     void setAdminCode(int code);
 
     @Insert("INSERT INTO admin (userid, position) VALUES " +

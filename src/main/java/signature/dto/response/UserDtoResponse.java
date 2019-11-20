@@ -15,7 +15,6 @@ public class UserDtoResponse {
     private String address;
     private String phone;
     private String position;
-    private String deposit;
     private String userType;
 
     public UserDtoResponse() {
@@ -92,14 +91,4 @@ public class UserDtoResponse {
     public void setPosition(String position) {
         this.position = position;
     }
-
-    public String getDeposit() {
-        return deposit;
-    }
-
-    public void setDeposit(String deposit) {
-        this.deposit = deposit;
-    }
-
-
 }

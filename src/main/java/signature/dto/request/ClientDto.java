@@ -41,9 +41,8 @@ public class ClientDto {
 
     private Role role;
     private int id;
-    private String publicKey;
 
-    public ClientDto(String firstName, String lastName, String patronymic, String email, String address, String phone, String login, String password, String publicKey) {
+    public ClientDto(String firstName, String lastName, String patronymic, String email, String address, String phone, String login, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.patronymic = patronymic;
@@ -52,7 +51,6 @@ public class ClientDto {
         this.phone = phone;
         this.login = login;
         this.password = password;
-        this.publicKey = publicKey;
         this.role = Role.CLIENT;
     }
 
@@ -138,13 +136,5 @@ public class ClientDto {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public String getPublicKey() {
-        return publicKey;
-    }
-
-    public void setPublicKey(String publicKey) {
-        this.publicKey = publicKey;
     }
 }
